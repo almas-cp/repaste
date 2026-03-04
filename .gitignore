@@ -1,0 +1,175 @@
+# ============================================================================
+# Production .gitignore for Repaste (Python + PyInstaller)
+# ============================================================================
+
+# ────────────────────────────────────────────────────────────────────────────
+# Python
+# ────────────────────────────────────────────────────────────────────────────
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# ────────────────────────────────────────────────────────────────────────────
+# Distribution / Packaging
+# ────────────────────────────────────────────────────────────────────────────
+
+build/
+dist/
+*.egg-info/
+*.egg
+eggs/
+*.whl
+sdist/
+develop-eggs/
+.installed.cfg
+
+# ────────────────────────────────────────────────────────────────────────────
+# PyInstaller
+# ────────────────────────────────────────────────────────────────────────────
+
+# Usually these files are written by a python script from a template
+# before PyInstaller builds the exe, so no reason to keep it in VCS.
+*.manifest
+*.spec
+
+# ────────────────────────────────────────────────────────────────────────────
+# Virtual Environments
+# ────────────────────────────────────────────────────────────────────────────
+
+.env/
+.venv/
+env/
+venv/
+ENV/
+.python-version
+
+# ────────────────────────────────────────────────────────────────────────────
+# IDE / Editor Settings
+# ────────────────────────────────────────────────────────────────────────────
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains (PyCharm, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim / Neovim
+*.swp
+*.swo
+*~
+.vim/
+
+# Cursor / AI editors
+.cursor/
+.gemini/
+
+# ────────────────────────────────────────────────────────────────────────────
+# OS Generated Files
+# ────────────────────────────────────────────────────────────────────────────
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+
+# Linux
+.directory
+*.lock
+
+# ────────────────────────────────────────────────────────────────────────────
+# Testing & Coverage
+# ────────────────────────────────────────────────────────────────────────────
+
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+.cache/
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.coveragerc
+
+# ────────────────────────────────────────────────────────────────────────────
+# Type Checking & Linting
+# ────────────────────────────────────────────────────────────────────────────
+
+.mypy_cache/
+.pytype/
+.pyre/
+.ruff_cache/
+
+# ────────────────────────────────────────────────────────────────────────────
+# Logs & Databases
+# ────────────────────────────────────────────────────────────────────────────
+
+*.log
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+
+# ────────────────────────────────────────────────────────────────────────────
+# Secrets & Environment Variables
+# ────────────────────────────────────────────────────────────────────────────
+
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+secrets.json
+config.local.*
+
+# ────────────────────────────────────────────────────────────────────────────
+# Miscellaneous
+# ────────────────────────────────────────────────────────────────────────────
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Translations
+*.mo
+*.pot
+
+# Documentation builds
+docs/_build/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.orig

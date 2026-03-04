@@ -2,3 +2,4 @@ pystray
 pyperclip
 pyautogui
 Pillow
+pynput

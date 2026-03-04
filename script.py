@@ -4,12 +4,14 @@ import pyautogui
 import time
 from PIL import Image, ImageDraw
 from threading import Thread
+from pynput import mouse
 
 # Configuration
 config = {
     'delay': 2,
     'typing_speed': 0.01,
-    'auto_paste': True
+    'auto_paste': True,
+    'trigger_mode': 'click'  # 'delay' or 'click'
 }
 
 def create_icon_image(color='blue'):
@@ -30,9 +32,37 @@ def paste_clipboard(icon):
         pyautogui.write(clipboard_content, interval=config['typing_speed'])
     icon.icon = create_icon_image('blue')
 
+def paste_on_click(icon):
+    """Wait for the next mouse click, then type clipboard content after 100ms"""
+    icon.icon = create_icon_image('yellow')
+
+    click_detected = False
+
+    def on_click(x, y, button, pressed):
+        nonlocal click_detected
+        if pressed:
+            click_detected = True
+            return False  # Stop the listener
+
+    # Listen for the next mouse click
+    with mouse.Listener(on_click=on_click) as listener:
+        listener.join()
+
+    if click_detected:
+        icon.icon = create_icon_image('green')
+        time.sleep(0.1)  # 100ms delay after click
+        clipboard_content = pyperclip.paste()
+        if clipboard_content:
+            pyautogui.write(clipboard_content, interval=config['typing_speed'])
+
+    icon.icon = create_icon_image('blue')
+
 def on_clicked(icon, item):
-    """Handle tray icon click"""
-    Thread(target=paste_clipboard, args=(icon,), daemon=True).start()
+    """Handle tray icon click — dispatches based on trigger mode"""
+    if config['trigger_mode'] == 'click':
+        Thread(target=paste_on_click, args=(icon,), daemon=True).start()
+    else:
+        Thread(target=paste_clipboard, args=(icon,), daemon=True).start()
 
 def set_delay(icon, seconds):
     """Set the delay before pasting"""
@@ -57,6 +87,12 @@ def show_clipboard(icon, item):
     preview = content[:50] + '...' if len(content) > 50 else content
     icon.notify(f'Clipboard: {preview}' if content else 'Clipboard is empty')
 
+def set_trigger_mode(icon, mode):
+    """Set the trigger mode for pasting"""
+    config['trigger_mode'] = mode
+    label = 'Click + 100ms' if mode == 'click' else f'Timed ({config["delay"]}s)'
+    icon.notify(f'Trigger mode: {label}')
+
 def setup_tray():
     """Setup and run the system tray icon"""
     icon_image = create_icon_image()
@@ -64,6 +100,18 @@ def setup_tray():
     menu = pystray.Menu(
         pystray.MenuItem('Paste', on_clicked, default=True),
         pystray.Menu.SEPARATOR,
+        pystray.MenuItem('Trigger Mode', pystray.Menu(
+            pystray.MenuItem(
+                'Click + 100ms',
+                lambda icon, item: set_trigger_mode(icon, 'click'),
+                checked=lambda item: config['trigger_mode'] == 'click'
+            ),
+            pystray.MenuItem(
+                'Timed Delay',
+                lambda icon, item: set_trigger_mode(icon, 'delay'),
+                checked=lambda item: config['trigger_mode'] == 'delay'
+            )
+        )),
         pystray.MenuItem('Delay', pystray.Menu(
             pystray.MenuItem('1 second', lambda icon, item: set_delay(icon, 1)),
             pystray.MenuItem('2 seconds', lambda icon, item: set_delay(icon, 2)),
